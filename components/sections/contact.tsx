@@ -134,7 +134,7 @@ export function Contact() {
       <div className="container mx-auto px-4">
         <SectionHeader
           title="Get In Touch"
-          subtitle="Ready to collaborate on your next project? Let's discuss opportunities."
+          subtitle="Ready to collaborate on your next project?   Let's discuss opportunities."
         />
 
         <div className="max-w-4xl mx-auto ">
@@ -210,8 +210,8 @@ export function Contact() {
                         Message Sent Successfully!
                       </h3>
                       <p className="text-green-600 mb-6">
-                        Thank you for reaching out! I'll get back to you within
-                        24 hours.
+                        Thank you for reaching out! I&apos; ll get back to you
+                        within 24 hours.
                       </p>
                       <Button onClick={handleNewMessage} variant="outline">
                         Send Another Message
