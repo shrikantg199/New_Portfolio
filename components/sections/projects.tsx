@@ -25,7 +25,7 @@ const projects: Project[] = [
     technologies: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
     liveUrl: "https://shrikant-portfolio-10.vercel.app/",
     githubUrl: "",
-    image: "/portfolio.png",
+    image: "/projects/web-projects/portfolio.png",
     year: "2024",
     category: "Web",
   },
@@ -37,21 +37,94 @@ const projects: Project[] = [
     technologies: ["React Native", "Firebase"],
     liveUrl: "",
     githubUrl: "https://github.com/shrikantg199/Business_directory_App.git",
-    image: "/business_directory.png",
+    image: "/projects/app-projects/business_directory.png",
     year: "2024",
     category: "App",
   },
   {
     id: 3,
-    title: "CryptoHub Web App",
+    title: "BuzzBasket",
     description:
-      "Real-time cryptocurrency data app with personalized watchlists and interactive charts.",
-    technologies: ["React.js", "Tailwind CSS"],
-    liveUrl: "https://crypto-hub-psi.vercel.app/",
+      "BuzzBasket: Full-stack eCommerce with authentication, products, cart, orders.",
+    technologies: [
+      "React.js",
+      "Tailwind CSS",
+      "Node.js",
+      "Express.js",
+      "Vercel",
+      "Render",
+      "cloudnary",
+    ],
+    liveUrl: "https://ecommerce-shop-5ngu.vercel.app/",
     githubUrl: "",
-    image: "/CryptoHub.jpg",
+    image: "/projects/web-projects/buzzbasket.png",
     year: "2024",
     category: "Web",
+  },
+  {
+    id: 4,
+    title: "Learning Management System (LMS)",
+    description:
+      "Built a responsive LMS using Next.js, Firebase, ShadCN UI, deployed.",
+    technologies: [
+      "React.js",
+      "Next.js",
+      "Firebase",
+      "vercel",
+      "GitHub",
+      "Gemini-AI",
+    ],
+    liveUrl: "https://www.cyborgrobotics.in/",
+    githubUrl: "",
+    image: "/projects/web-projects/CyborgRobotics.png",
+    year: "2024",
+    category: "Web",
+  },
+  {
+    id: 5,
+    title: "Social Flow",
+    description:
+      "Built SocialFlow: full-stack Instagram-like app with auth, uploads, posts, likes, comments, follows.",
+    technologies: ["React.js", "Next.js", "MongoDB", "vercel", "GitHub"],
+    liveUrl: "https://social-flow-pied.vercel.app/",
+    githubUrl: "https://github.com/shrikantg199/Business_directory_App.git",
+    image: "/projects/web-projects/SocialFlow.png",
+    year: "2024",
+    category: "Web",
+  },
+  {
+    id: 6,
+    title: "X App UI",
+    description: "built X app UI using react native + expo",
+    technologies: ["React Native (EXPO)", "Tailwind Css"],
+    liveUrl: "",
+    githubUrl: "https://github.com/shrikantg199/X-APP-clone-UI.git",
+    image: "/projects/app-projects/X-app.png",
+    year: "2024",
+    category: "App",
+  },
+  {
+    id: 7,
+    title: "LinkedIn Clone App",
+    description:
+      "Created a LinkedIn clone using React Native (Expo) and Firebase with authentication and real-time database.",
+    technologies: ["React Native (Expo)", "Firebase", "Tailwind Css"],
+    liveUrl: "",
+    githubUrl: "https://github.com/shrikantg199/Linkedin_clone", // replace if different
+    image: "/projects/app-projects/Linkedin.png", // update path to your image
+    year: "2024",
+    category: "App",
+  },
+  {
+    id: 8,
+    title: "Coffee Shop App",
+    description: "Built Coffee Shop app UI with authentication using Clerk.",
+    technologies: ["React Native (Expo)", "Clerk", "Tailwind Css"],
+    liveUrl: "",
+    githubUrl: "https://github.com/shrikantg199/Coffee_shop", // replace with actual repo if different
+    image: "/projects/app-projects/Coffee.png", // update path to your image
+    year: "2024",
+    category: "App",
   },
 ];
 
@@ -59,11 +132,16 @@ const categories = ["All", "Web", "App"];
 
 export function Projects() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [showAll, setShowAll] = useState(false);
 
   const filteredProjects =
     selectedCategory === "All"
       ? projects
       : projects.filter((project) => project.category === selectedCategory);
+
+  const displayedProjects = showAll
+    ? filteredProjects
+    : filteredProjects.slice(0, 3);
 
   const handleCategoryChange = (category: string): void => {
     setSelectedCategory(category);
@@ -100,7 +178,7 @@ export function Projects() {
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {filteredProjects.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
@@ -214,6 +292,18 @@ export function Projects() {
             </motion.div>
           ))}
         </div>
+
+        {/* Show More/Less Button */}
+        {filteredProjects.length > 3 && (
+          <div className="mt-8 text-center">
+            <Button
+              onClick={() => setShowAll((prev) => !prev)}
+              className="px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-lg shadow-md bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {showAll ? "Show Less Projects" : "Show More Projects"}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
