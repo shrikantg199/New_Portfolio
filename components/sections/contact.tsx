@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { useState } from "react";
+import Image from "next/image";
 
 const contactInfo = [
   {
@@ -168,9 +169,11 @@ export function Contact() {
                         className="flex items-center space-x-4 p-3 rounded-lg hover:bg-muted/30 transition-all duration-300"
                       >
                         <div className="p-2 bg-gradient-to-br from-primary/10 to-blue-600/10 rounded-full">
-                          <img
+                          <Image
                             src={info.icon}
                             alt={info.label}
+                            width={32}
+                            height={32}
                             className="w-8 h-8 object-contain rounded-full"
                           />
                         </div>

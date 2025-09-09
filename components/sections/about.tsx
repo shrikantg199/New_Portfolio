@@ -31,14 +31,14 @@ const highlights = [
 
 export const About = () => {
   return (
-    <section id="about" className="relative py-16">
+    <section id="about" className="relative py-16 z-auto">
       <div className="container mx-auto px-4">
         <SectionHeader
           title="About Me"
           subtitle="Passionate developer focused on creating seamless and scalable digital experiences"
         />
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto z-10">
           <div className="text-center mb-12">
             <Card className="border-0 dark:border shadow-lg ">
               <CardContent className="p-8">

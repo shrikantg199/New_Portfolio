@@ -1,21 +1,75 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  Github,
-  Linkedin,
-  Mail,
-  Download,
-  ExternalLink,
-  ArrowDown,
-  Sparkles,
-  Code2,
-  Move,
-} from "lucide-react";
-import { SocialLink } from "@/lib/types";
 import { useState, useEffect, useRef } from "react";
+import { SocialLink } from "@/lib/types";
+// Inline icon components to avoid bundling lucide-react
+const IconDownload = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <path d="M7 10l5 5 5-5" />
+    <path d="M12 15V3" />
+  </svg>
+);
+const IconExternalLink = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d="M15 3h6v6" />
+    <path d="M10 14L21 3" />
+    <path d="M21 14v7H3V3h7" />
+  </svg>
+);
+const IconSparkles = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d="M12 2l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z" />
+    <path d="M20 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z" />
+  </svg>
+);
+const IconMove = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d="M12 2l3 3-3 3-3-3 3-3z" />
+    <path d="M12 22l3-3-3-3-3 3 3 3z" />
+    <path d="M2 12l3 3 3-3-3-3-3 3z" />
+    <path d="M22 12l-3 3-3-3 3-3 3 3z" />
+  </svg>
+);
 
 // Removed floatingElements as requested
 
@@ -26,7 +80,7 @@ const floatingSymbols = [
   { text: "[]", delay: 2.2, duration: 17, x: "12%", y: "35%" },
   { text: "()", delay: 4.1, duration: 19, x: "82%", y: "65%" },
   { text: "=>", delay: 1.8, duration: 20, x: "55%", y: "75%" },
-  { text: ";</>", delay: 2.8, duration: 21, x: "40%", y: "18%" },
+  { text: ";/>", delay: 2.8, duration: 21, x: "40%", y: "18%" },
   { text: "{/* */}", delay: 3.6, duration: 22, x: "5%", y: "80%" },
   { text: "const", delay: 5.2, duration: 24, x: "90%", y: "40%" },
 ];
@@ -74,11 +128,14 @@ export function Hero() {
   const [isDeleting, setIsDeleting] = useState(false);
   const bgRef = useRef<HTMLDivElement>(null);
   const [showDragHint, setShowDragHint] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const typingSpeed = isDeleting ? 50 : 100;
     const deletingSpeed = 50;
     const pauseTime = 1000;
+
+    if (prefersReducedMotion) return; // Skip typing loop on reduced motion
 
     const typeText = () => {
       const currentSkill = skills[currentSkillIndex];
@@ -102,7 +159,7 @@ export function Hero() {
       isDeleting ? deletingSpeed : typingSpeed
     );
     return () => clearTimeout(timer);
-  }, [currentText, isDeleting, currentSkillIndex]);
+  }, [currentText, isDeleting, currentSkillIndex, prefersReducedMotion]);
 
   // Show one-time drag hint on first visit
   useEffect(() => {
@@ -125,6 +182,9 @@ export function Hero() {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Helpers to disable or tone down animations when reduced motion is preferred
+  const animated = !prefersReducedMotion;
+
   return (
     <section
       id="home"
@@ -134,14 +194,14 @@ export function Hero() {
       <AnimatePresence>
         {showDragHint && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
+            initial={animated ? { opacity: 0, y: -8 } : false}
+            animate={animated ? { opacity: 1, y: 0 } : {}}
+            exit={animated ? { opacity: 0, y: -8 } : {}}
+            transition={animated ? { duration: 0.3 } : {}}
             className="absolute right-4 z-40 top-20"
           >
             <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-slate-900/80 text-white text-sm shadow-lg backdrop-blur-md border border-white/10">
-              <Move className="w-4 h-4" aria-hidden="true" />
+              <IconMove className="w-4 h-4" aria-hidden="true" />
               <span>Tip: Drag the background symbols</span>
             </div>
           </motion.div>
@@ -152,26 +212,28 @@ export function Hero() {
         {/* Gradient Orbs with reduced opacity for solid background */}
         <motion.div
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: 360,
-          }}
-          transition={{
-            scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-          }}
+          animate={animated ? { scale: [1, 1.2, 1], rotate: 360 } : {}}
+          transition={
+            animated
+              ? {
+                  scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                }
+              : {}
+          }
           aria-hidden="true"
         />
         <motion.div
           className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/10 to-pink-600/10 rounded-full blur-3xl pointer-events-none"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: -360,
-          }}
-          transition={{
-            scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-          }}
+          animate={animated ? { scale: [1.2, 1, 1.2], rotate: -360 } : {}}
+          transition={
+            animated
+              ? {
+                  scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: 25, repeat: Infinity, ease: "linear" },
+                }
+              : {}
+          }
           aria-hidden="true"
         />
 
@@ -205,27 +267,29 @@ export function Hero() {
           aria-hidden="true"
         />
 
-        {/* Tech icons removed */}
-
         {/* Floating text symbols (very subtle, draggable) */}
         {floatingSymbols.map((symbol, index) => (
           <motion.span
             key={`sym-${index}`}
             className="absolute z-20 select-none pointer-events-auto cursor-grab active:cursor-grabbing touch-none text-4xl font-semibold text-slate-400/20 dark:text-slate-200/15"
             style={{ left: symbol.x, top: symbol.y }}
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 6, -6, 0],
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: symbol.duration,
-              repeat: Infinity,
-              delay: symbol.delay,
-              ease: "easeInOut",
-            }}
-            drag
-            whileDrag={{ scale: 1.05 }}
+            animate={
+              animated
+                ? { y: [0, -30, 0], rotate: [0, 6, -6, 0], scale: [1, 1.05, 1] }
+                : {}
+            }
+            transition={
+              animated
+                ? {
+                    duration: symbol.duration,
+                    repeat: Infinity,
+                    delay: symbol.delay,
+                    ease: "easeInOut",
+                  }
+                : {}
+            }
+            drag={animated}
+            whileDrag={animated ? { scale: 1.05 } : {}}
             dragElastic={0.2}
             dragMomentum={false}
             aria-hidden="true"
@@ -239,23 +303,28 @@ export function Hero() {
         <div className="text-center max-w-5xl mx-auto">
           {/* Profile Image with Enhanced Effects */}
           <motion.div
-            initial={{ scale: 0, opacity: 0, rotate: -180 }}
-            animate={{ scale: 1, opacity: 1, rotate: 0 }}
-            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+            initial={animated ? { scale: 0, opacity: 0, rotate: -180 } : false}
+            animate={animated ? { scale: 1, opacity: 1, rotate: 0 } : {}}
+            transition={
+              animated ? { duration: 0.8, type: "spring", stiffness: 100 } : {}
+            }
             className="relative inline-block  md:mb-12"
           >
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-md opacity-75"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              animate={animated ? { rotate: 360 } : {}}
+              transition={
+                animated
+                  ? { duration: 8, repeat: Infinity, ease: "linear" }
+                  : {}
+              }
               aria-hidden="true"
             />
             <motion.div
-              whileHover={{
-                scale: 1.05,
-                rotate: [0, -2, 2, 0],
-              }}
-              transition={{ duration: 0.3 }}
+              whileHover={
+                animated ? { scale: 1.05, rotate: [0, -2, 2, 0] } : {}
+              }
+              transition={animated ? { duration: 0.3 } : {}}
               className="relative"
             >
               <Image
@@ -271,8 +340,8 @@ export function Hero() {
             {/* Status Indicator */}
             <motion.div
               className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-3 border-white dark:border-slate-800 rounded-full flex items-center justify-center"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={animated ? { scale: [1, 1.2, 1] } : {}}
+              transition={animated ? { duration: 2, repeat: Infinity } : {}}
               aria-label="Available for opportunities"
             >
               <div className="w-2 h-2 bg-white rounded-full" />
@@ -281,26 +350,26 @@ export function Hero() {
 
           {/* Enhanced Name and Title */}
           <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            initial={animated ? { y: 50, opacity: 0 } : false}
+            animate={animated ? { y: 0, opacity: 1 } : {}}
+            transition={animated ? { duration: 0.8, delay: 0.3 } : {}}
             className="mb-2"
           >
             <motion.div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              initial={animated ? { scale: 0.8, opacity: 0 } : false}
+              animate={animated ? { scale: 1, opacity: 1 } : {}}
+              transition={animated ? { duration: 0.5, delay: 0.2 } : {}}
             >
-              <Sparkles className="w-4 h-4" aria-hidden="true" />
+              <IconSparkles className="w-4 h-4" aria-hidden="true" />
               Available for opportunities
             </motion.div>
 
             <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-1 md:mb-2 leading-tight">
               <motion.span
                 className="inline-block text-primary"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
+                whileHover={animated ? { scale: 1.02 } : {}}
+                transition={animated ? { duration: 0.2 } : {}}
               >
                 Shrikant Gaikwad
               </motion.span>
@@ -309,9 +378,9 @@ export function Hero() {
           </motion.div>
 
           <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            initial={animated ? { y: 30, opacity: 0 } : false}
+            animate={animated ? { y: 0, opacity: 1 } : {}}
+            transition={animated ? { duration: 0.6, delay: 0.4 } : {}}
             className="mb-2 md:mb-2"
           >
             <p className="text-2xl md:text-3xl font-semibold text-slate-600 dark:text-slate-300 mb-2">
@@ -319,46 +388,50 @@ export function Hero() {
             </p>
             <motion.div
               className="w-24 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mx-auto rounded-full"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              initial={animated ? { scaleX: 0 } : false}
+              animate={animated ? { scaleX: 1 } : {}}
+              transition={animated ? { duration: 0.8, delay: 0.6 } : {}}
               aria-hidden="true"
             />
           </motion.div>
 
           {/* Enhanced Description with Typing Effect */}
           <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            initial={animated ? { y: 30, opacity: 0 } : false}
+            animate={animated ? { y: 0, opacity: 1 } : {}}
+            transition={animated ? { duration: 0.6, delay: 0.5 } : {}}
             className="md:mb-6 mb-2 max-w-3xl mx-auto"
           >
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
               Building scalable web & mobile apps with{" "}
               <span className="font-semibold text-blue-600 dark:text-blue-400">
-                {currentText}
+                {prefersReducedMotion ? "React, Next.js, Node.js" : currentText}
                 <span className="animate-pulse">|</span>
               </span>
             </p>
 
             {/* Skills List with Fade-in Animation */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
+              initial={animated ? { opacity: 0, y: 20 } : false}
+              animate={animated ? { opacity: 1, y: 0 } : {}}
+              transition={animated ? { duration: 0.8, delay: 1.0 } : {}}
               className="flex flex-wrap justify-center gap-2 mt-4"
             >
               {skills.map((skill, index) => (
                 <motion.span
                   key={skill.text}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 1.2 + index * 0.1,
-                    type: "spring",
-                    stiffness: 200,
-                  }}
+                  initial={animated ? { opacity: 0, scale: 0.8 } : false}
+                  animate={animated ? { opacity: 1, scale: 1 } : {}}
+                  transition={
+                    animated
+                      ? {
+                          duration: 0.5,
+                          delay: 1.2 + index * 0.1,
+                          type: "spring",
+                          stiffness: 200,
+                        }
+                      : {}
+                  }
                   className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-700/50 hover:scale-105 transition-transform cursor-default"
                 >
                   {skill.text}
@@ -369,14 +442,14 @@ export function Hero() {
 
           {/* Enhanced CTA Buttons with Prominent Download Button */}
           <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            initial={animated ? { y: 30, opacity: 0 } : false}
+            animate={animated ? { y: 0, opacity: 1 } : {}}
+            transition={animated ? { duration: 0.6, delay: 0.6 } : {}}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
           >
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={animated ? { scale: 1.05 } : {}}
+              whileTap={animated ? { scale: 0.95 } : {}}
               className="relative"
             >
               {/* Glow effect for download button */}
@@ -391,7 +464,7 @@ export function Hero() {
                   download
                   aria-label="Download Shrikant Gaikwad's resume"
                 >
-                  <Download
+                  <IconDownload
                     className="w-5 h-5 mr-2 group-hover:animate-bounce"
                     aria-hidden="true"
                   />
@@ -400,7 +473,10 @@ export function Hero() {
               </Button>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div
+              whileHover={animated ? { scale: 1.05 } : {}}
+              whileTap={animated ? { scale: 0.95 } : {}}
+            >
               <Button
                 size="lg"
                 variant="outline"
@@ -412,7 +488,7 @@ export function Hero() {
                   aria-label="View Shrikant Gaikwad's projects"
                 >
                   View My Work
-                  <ExternalLink
+                  <IconExternalLink
                     className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
                     aria-hidden="true"
                   />
@@ -423,9 +499,9 @@ export function Hero() {
 
           {/* Enhanced Social Links */}
           <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
+            initial={animated ? { y: 30, opacity: 0 } : false}
+            animate={animated ? { y: 0, opacity: 1 } : {}}
+            transition={animated ? { duration: 0.6, delay: 0.7 } : {}}
             className="flex justify-center space-x-6 -mt-4"
           >
             {socialLinks.map((social, index) => (
@@ -441,15 +517,17 @@ export function Hero() {
                     : "noopener noreferrer"
                 }
                 className="group relative p-0 bg-transparent border-0 shadow-none hover:scale-110 transition-transform"
-                whileHover={{
-                  scale: 1.1,
-                  rotate: index % 2 === 0 ? 5 : -5,
-                  y: -5,
-                }}
-                whileTap={{ scale: 0.9 }}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                whileHover={
+                  animated
+                    ? { scale: 1.1, rotate: index % 2 === 0 ? 5 : -5, y: -5 }
+                    : {}
+                }
+                whileTap={animated ? { scale: 0.9 } : {}}
+                initial={animated ? { y: 20, opacity: 0 } : false}
+                animate={animated ? { y: 0, opacity: 1 } : {}}
+                transition={
+                  animated ? { duration: 0.5, delay: 0.8 + index * 0.1 } : {}
+                }
                 aria-label={`Visit ${social.label} profile`}
               >
                 {social.imageSrc ? (

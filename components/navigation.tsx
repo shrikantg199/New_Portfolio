@@ -4,7 +4,39 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X } from "lucide-react";
+
+// Inline icons to avoid bundling lucide-react
+const IconMenu = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d="M3 12h18" />
+    <path d="M3 6h18" />
+    <path d="M3 18h18" />
+  </svg>
+);
+const IconX = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d="M18 6L6 18" />
+    <path d="M6 6l12 12" />
+  </svg>
+);
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -110,8 +142,8 @@ export function Navigation() {
       },
       {
         root: null,
-        rootMargin: "0px 0px -50% 0px", // bias towards section in upper half
-        threshold: [0.25, 0.5, 0.75],
+        rootMargin: "0px 0px -60% 0px", // bias towards section near center
+        threshold: [0.15, 0.35, 0.6],
       }
     );
 
@@ -126,7 +158,7 @@ export function Navigation() {
       transition={{ duration: 0.3 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b shadow-sm"
+          ? "md:bg-background/80 md:backdrop-blur-md md:border-b md:shadow-sm bg-white dark:bg-black"
           : "bg-transparent"
       }`}
     >
@@ -152,9 +184,10 @@ export function Navigation() {
                   href={item.href}
                   className={`text-sm font-medium transition-colors relative inline-block ${
                     activeSection === item.href.replace("#", "")
-                      ? "text-[#2563eb]"
-                      : "hover:text-[#2563eb]"
+                      ? "text-[#2563eb] dark:text-[#2563eb]"
+                      : "hover:text-[#2563eb] dark:hover:text-[#2563eb]"
                   }`}
+                  onClick={() => setActiveSection(item.href.replace("#", ""))}
                   whileTap={{ scale: 0.95 }}
                 >
                   {item.name}
@@ -181,7 +214,7 @@ export function Navigation() {
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
             >
-              <Menu size={22} className="text-foreground" />
+              <IconMenu className="w-[22px] h-[22px] text-foreground" />
             </Button>
           </div>
         </div>
@@ -193,7 +226,7 @@ export function Navigation() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-0 md:hidden z-[60] bg-background/95 backdrop-blur-sm"
+            className="fixed inset-0 md:hidden bg-white dark:bg-black z-[100]"
           >
             {/* Close button inside overlay */}
             <button
@@ -202,7 +235,7 @@ export function Navigation() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="absolute top-5 right-5 p-3 rounded-full bg-muted/60 hover:bg-muted transition-colors"
             >
-              <X size={22} className="text-foreground" />
+              <IconX className="w-[22px] h-[22px] text-foreground" />
             </button>
 
             <div className="h-full w-full flex flex-col items-start justify-start px-6 pt-24 pb-8">
@@ -211,12 +244,15 @@ export function Navigation() {
                   <motion.a
                     key={item.name}
                     href={item.href}
-                    className={`text-xl font-semibold tracking-wide transition-colors ${
+                    className={`text-xl light:text-black dark:text-white font-semibold tracking-wide transition-colors ${
                       activeSection === item.href.replace("#", "")
-                        ? "text-[#2563eb]"
-                        : "hover:text-[#2563eb]"
+                        ? "text-[#2563eb] dark:text-[#2563eb]"
+                        : "hover:text-[#2563eb] dark:hover:text-[#2563eb]"
                     }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setActiveSection(item.href.replace("#", ""));
+                      setIsMobileMenuOpen(false);
+                    }}
                     whileTap={{ scale: 0.98 }}
                   >
                     {item.name}
