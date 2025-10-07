@@ -328,7 +328,7 @@ export function Hero() {
               className="relative"
             >
               <Image
-                src="/hero.jpg"
+                src="/hero.png"
                 alt="Shrikant Gaikwad profile photo"
                 width={144}
                 height={144}

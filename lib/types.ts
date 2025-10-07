@@ -39,3 +39,10 @@ export interface ContactForm {
   email: string;
   message: string;
 }
+
+// Google Analytics gtag declaration
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}

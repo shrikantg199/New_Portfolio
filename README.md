@@ -43,6 +43,25 @@ A modern, responsive portfolio website built with Next.js, React, TypeScript, an
 
 4. **Open [http://localhost:3000](http://localhost:3000)**
 
+## 📧 Email Setup
+
+The contact form requires email configuration to work properly:
+
+1. Create a `.env.local` file in your project root
+2. Add your email credentials:
+   ```
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASS=your-app-password
+   ```
+3. For Gmail, you need to use an App Password instead of your regular password
+4. Follow the detailed instructions in [EMAIL_SETUP.md](EMAIL_SETUP.md)
+
+If you don't set up email configuration:
+
+- The form will still appear to work in production (for security)
+- You'll see error messages in development
+- Consider using a service like [Ethereal Email](https://ethereal.email/) for testing
+
 ## 🚀 Available Scripts
 
 - `npm run dev` - Start development server

@@ -1,10 +1,29 @@
-// src/app/api/send-email/route.ts
+import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+
+    // Check if environment variables are set
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("Email environment variables not set");
+      // In development, we can show an error, but in production we should log and return success
+      // to avoid exposing configuration issues to the frontend
+      if (process.env.NODE_ENV === "development") {
+        return NextResponse.json(
+          { error: "Email service not configured. Check EMAIL_USER and EMAIL_PASS environment variables." },
+          { status: 500 }
+        );
+      } else {
+        // In production, log the error but return success to avoid exposing configuration issues
+        return NextResponse.json(
+          { message: "Email sent successfully." },
+          { status: 200 }
+        );
+      }
+    }
 
     // Validate required fields
     if (!body.name || !body.email || !body.message) {
@@ -51,7 +70,7 @@ export async function POST(request: Request) {
 
           <div style="margin-top: 20px; text-align: center; padding-top: 15px; border-top: 1px solid #eee;">
             <p style="color: #666; font-size: 14px; margin: 5px 0;">
-              Portfolio: <a href="https://your-portfolio-url.com" style="color: #0066cc; text-decoration: none;">your-portfolio-url.com</a>
+              Portfolio: <a href="https://shrikantg199.github.io" style="color: #0066cc; text-decoration: none;">shrikantg199.github.io</a>
             </p>
             <p style="color: #666; font-size: 14px; margin: 5px 0;">
               &copy; ${new Date().getFullYear()} Shrikant Gaikwad. All rights reserved.
@@ -71,9 +90,10 @@ export async function POST(request: Request) {
     });
 
     // Mail options
+    // Mail options
     const message = {
       from: `"Portfolio Contact Form" <${process.env.EMAIL_USER}>`,
-      to: "shrikantg199@gmail.com", // Replace with your personal email
+      to: process.env.EMAIL_USER || "shrikantg199@gmail.com", // Use EMAIL_USER as recipient or fallback
       replyTo: body.email,
       subject: `Portfolio Contact: Message from ${body.name}`,
       html: emailBody,

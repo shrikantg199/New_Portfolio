@@ -19,6 +19,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    serverComponentsExternalPackages: ['critters'],
   },
   
   // Enable compression
@@ -26,6 +27,44 @@ const nextConfig = {
   
   // Enable SWC minification
   swcMinify: true,
+  
+  // Enable webpack optimizations
+  webpack: (config, { dev, isServer }) => {
+    // Reduce bundle size by excluding unused modules
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+          framer: {
+            name: 'framer',
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            chunks: 'all',
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          react: {
+            name: 'react',
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            chunks: 'all',
+            priority: 30,
+            reuseExistingChunk: true,
+          }
+        }
+      };
+      
+      // Enable aggressive code splitting
+      config.optimization.minimize = true;
+    }
+    
+    return config;
+  },
 
   // Security headers
   async headers() {
