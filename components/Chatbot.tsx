@@ -21,16 +21,7 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const assistantIntro = `Hi, I'm Shrikant Gaikwad's AI assistant, powered by Google Gemini. I can help you learn more about Shrikant's professional background, skills, projects, and experience.
-
-I can provide information about:
-- Professional experience and work history
-- Technical skills and expertise
-- Projects and accomplishments
-- Education background
-- Contact information
-
-Feel free to ask me any questions about Shrikant's career and qualifications!`;
+  const assistantIntro = `Hello! I’m Shrikant Gaikwad’s AI assistant, here to share info about his work, skills, and projects. How can I help you today?`;
 
   // Initialize messages - always start fresh without previous messages
   useEffect(() => {
