@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/hero";
 import { Navigation } from "@/components/navigation";
 import ErrorBoundary from "@/components/error-boundary";
 import Footer from "@/components/sections/Footer";
+import Chatbot from "@/components/Chatbot";
 
 const About = dynamic(
   () => import("@/components/sections/about").then((m) => m.About),
@@ -39,6 +40,7 @@ export default function Home() {
         <Projects />
         <Contact />
         <Footer />
+        <Chatbot />
       </main>
     </ErrorBoundary>
   );

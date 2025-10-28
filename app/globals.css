@@ -97,4 +97,12 @@
   .glass-card {
     @apply bg-background/80 backdrop-blur-sm border border-white/10;
   }
+  
+  /* Ensure chatbot is visible */
+  .chatbot-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 50;
+  }
 }
