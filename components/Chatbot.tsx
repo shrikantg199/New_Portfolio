@@ -45,7 +45,7 @@ Feel free to ask me any questions about Shrikant's career and qualifications!`;
 
     // Clear any saved messages
     localStorage.removeItem("chatbotMessages");
-  }, []);
+  }, [assistantIntro]);
 
   // Removed localStorage saving functionality as per user request;
 
@@ -217,7 +217,7 @@ Feel free to ask me any questions about Shrikant's career and qualifications!`;
             <Card className="w-full max-w-md bg-background border rounded-lg shadow-lg overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 border-b">
                 <CardTitle className="text-lg font-semibold">
-                  Shrikant's Assistant
+                  Shrikant&apos;s Assistant
                 </CardTitle>
                 <div className="flex space-x-2">
                   <Button
