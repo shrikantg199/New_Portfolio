@@ -1,32 +1,36 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/hero";
 import { Navigation } from "@/components/navigation";
 import ErrorBoundary from "@/components/error-boundary";
 import Footer from "@/components/sections/Footer";
-import Chatbot from "@/components/Chatbot";
+
+const SectionFallback = () => (
+  <div className="container mx-auto px-4 py-12">
+    <div className="h-24 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
+  </div>
+);
 
 const About = dynamic(
-  () => import("@/components/sections/about").then((m) => m.About),
-  { ssr: true }
+  () => import("@/components/sections/about"),
+  { ssr: false, loading: () => <SectionFallback /> }
 );
 const Skills = dynamic(
-  () => import("@/components/sections/skills").then((m) => m.Skills),
-  { ssr: true }
+  () => import("@/components/sections/skills"),
+  { ssr: false, loading: () => <SectionFallback /> }
 );
 const Experience = dynamic(
-  () => import("@/components/sections/experience").then((m) => m.Experience),
-  { ssr: true }
+  () => import("@/components/sections/experience"),
+  { ssr: false, loading: () => <SectionFallback /> }
 );
 const Projects = dynamic(
-  () => import("@/components/sections/projects").then((m) => m.Projects),
-  { ssr: true }
+  () => import("@/components/sections/projects"),
+  { ssr: false, loading: () => <SectionFallback /> }
 );
 const Contact = dynamic(
-  () => import("@/components/sections/contact").then((m) => m.Contact),
-  { ssr: true }
+  () => import("@/components/sections/contact"),
+  { ssr: false, loading: () => <SectionFallback /> }
 );
+const Chatbot = dynamic(() => import("@/components/Chatbot"), { ssr: false });
 
 export default function Home() {
   return (

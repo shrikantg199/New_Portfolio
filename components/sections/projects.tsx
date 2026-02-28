@@ -205,6 +205,8 @@ export function Projects() {
                     alt={`${project.title} project screenshot`}
                     width={400}
                     height={300}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    quality={72}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     priority={index === 0}
                   />
@@ -332,3 +334,5 @@ export function Projects() {
     </section>
   );
 }
+
+export default Projects;

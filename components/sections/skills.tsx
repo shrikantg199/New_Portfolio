@@ -126,6 +126,10 @@ export function Skills() {
                                 alt={skill}
                                 width={40}
                                 height={40}
+                                sizes="40px"
+                                quality={70}
+                                loading="lazy"
+                                decoding="async"
                                 className="rounded-xl bg-white/95 dark:bg-white p-1"
                               />
                               <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
@@ -154,3 +158,5 @@ export function Skills() {
     </section>
   );
 }
+
+export default Skills;

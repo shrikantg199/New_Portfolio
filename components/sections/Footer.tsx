@@ -26,6 +26,10 @@ const Footer = () => {
             alt="GitHub"
             width={20}
             height={20}
+            sizes="20px"
+            loading="lazy"
+            decoding="async"
+            quality={70}
           />
         </Link>
         <Link
@@ -41,6 +45,10 @@ const Footer = () => {
             width={20}
             className="rounded-xl"
             height={20}
+            sizes="20px"
+            loading="lazy"
+            decoding="async"
+            quality={70}
           />
         </Link>
         <Link
@@ -53,6 +61,10 @@ const Footer = () => {
             alt="Email"
             width={20}
             height={20}
+            sizes="20px"
+            loading="lazy"
+            decoding="async"
+            quality={70}
           />
         </Link>
         <Link
@@ -68,6 +80,10 @@ const Footer = () => {
             className="rounded-xl"
             width={20}
             height={20}
+            sizes="20px"
+            loading="lazy"
+            decoding="async"
+            quality={70}
           />
         </Link>
         <Link
@@ -82,6 +98,10 @@ const Footer = () => {
             alt="YouTube"
             width={20}
             height={20}
+            sizes="20px"
+            loading="lazy"
+            decoding="async"
+            quality={70}
           />
         </Link>
       </div>

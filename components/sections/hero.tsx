@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  LazyMotion,
+  domAnimation,
+  m,
+  AnimatePresence,
+  useReducedMotion,
+} from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
@@ -182,14 +188,15 @@ export function Hero() {
   const animated = !prefersReducedMotion;
 
   return (
-    <section
-      id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50 dark:bg-slate-900"
-    >
+    <LazyMotion features={domAnimation}>
+      <section
+        id="home"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50 dark:bg-slate-900"
+      >
       {/* One-time drag hint */}
       <AnimatePresence>
         {showDragHint && (
-          <motion.div
+          <m.div
             initial={animated ? { opacity: 0, y: -8 } : false}
             animate={animated ? { opacity: 1, y: 0 } : {}}
             exit={animated ? { opacity: 0, y: -8 } : {}}
@@ -200,13 +207,13 @@ export function Hero() {
               <IconMove className="w-4 h-4" aria-hidden="true" />
               <span>Tip: Drag the background symbols</span>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
       {/* Enhanced Background Elements */}
       <div ref={bgRef} className="absolute inset-0">
         {/* Gradient Orbs with reduced opacity for solid background */}
-        <motion.div
+        <m.div
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none"
           animate={animated ? { scale: [1, 1.2, 1], rotate: 360 } : {}}
           transition={
@@ -219,7 +226,7 @@ export function Hero() {
           }
           aria-hidden="true"
         />
-        <motion.div
+        <m.div
           className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/10 to-pink-600/10 rounded-full blur-3xl pointer-events-none"
           animate={animated ? { scale: [1.2, 1, 1.2], rotate: -360 } : {}}
           transition={
@@ -265,7 +272,7 @@ export function Hero() {
 
         {/* Floating text symbols (very subtle, draggable) */}
         {floatingSymbols.map((symbol, index) => (
-          <motion.span
+          <m.span
             key={`sym-${index}`}
             className="absolute z-20 select-none pointer-events-auto cursor-grab active:cursor-grabbing touch-none text-4xl font-semibold text-slate-400/20 dark:text-slate-200/15"
             style={{ left: symbol.x, top: symbol.y }}
@@ -291,14 +298,14 @@ export function Hero() {
             aria-hidden="true"
           >
             {symbol.text}
-          </motion.span>
+          </m.span>
         ))}
       </div>
 
       <div className="container mx-auto px-4 py-10 md:py-20 relative z-10  md:mb-6">
         <div className="text-center max-w-5xl mx-auto">
           {/* Profile Image with Enhanced Effects */}
-          <motion.div
+          <m.div
             initial={animated ? { scale: 0, opacity: 0, rotate: -180 } : false}
             animate={animated ? { scale: 1, opacity: 1, rotate: 0 } : {}}
             transition={
@@ -306,7 +313,7 @@ export function Hero() {
             }
             className="relative inline-block  md:mb-12"
           >
-            <motion.div
+            <m.div
               className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-md opacity-75"
               animate={animated ? { rotate: 360 } : {}}
               transition={
@@ -316,7 +323,7 @@ export function Hero() {
               }
               aria-hidden="true"
             />
-            <motion.div
+            <m.div
               whileHover={
                 animated ? { scale: 1.05, rotate: [0, -2, 2, 0] } : {}
               }
@@ -328,30 +335,32 @@ export function Hero() {
                 alt="Shrikant Gaikwad profile photo"
                 width={144}
                 height={144}
+                sizes="144px"
+                quality={72}
                 className="relative w-36 h-36 rounded-full object-cover  border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-800"
                 priority
               />
-            </motion.div>
+            </m.div>
 
             {/* Status Indicator */}
-            <motion.div
+            <m.div
               className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-3 border-white dark:border-slate-800 rounded-full flex items-center justify-center"
               animate={animated ? { scale: [1, 1.2, 1] } : {}}
               transition={animated ? { duration: 2, repeat: Infinity } : {}}
               aria-label="Available for opportunities"
             >
               <div className="w-2 h-2 bg-white rounded-full" />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Enhanced Name and Title */}
-          <motion.div
+          <m.div
             initial={animated ? { y: 50, opacity: 0 } : false}
             animate={animated ? { y: 0, opacity: 1 } : {}}
             transition={animated ? { duration: 0.8, delay: 0.3 } : {}}
             className="mb-2"
           >
-            <motion.div
+            <m.div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4"
               initial={animated ? { scale: 0.8, opacity: 0 } : false}
               animate={animated ? { scale: 1, opacity: 1 } : {}}
@@ -359,21 +368,21 @@ export function Hero() {
             >
               <IconSparkles className="w-4 h-4" aria-hidden="true" />
               Available for opportunities
-            </motion.div>
+            </m.div>
 
             <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-1 md:mb-2 leading-tight">
-              <motion.span
+              <m.span
                 className="inline-block text-primary"
                 whileHover={animated ? { scale: 1.02 } : {}}
                 transition={animated ? { duration: 0.2 } : {}}
               >
                 Shrikant Gaikwad
-              </motion.span>
+              </m.span>
               <br />
             </h1>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={animated ? { y: 30, opacity: 0 } : false}
             animate={animated ? { y: 0, opacity: 1 } : {}}
             transition={animated ? { duration: 0.6, delay: 0.4 } : {}}
@@ -382,17 +391,17 @@ export function Hero() {
             <p className="text-2xl md:text-3xl font-semibold text-slate-600 dark:text-slate-300 mb-2">
               Full Stack Web Developer
             </p>
-            <motion.div
+            <m.div
               className="w-24 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mx-auto rounded-full"
               initial={animated ? { scaleX: 0 } : false}
               animate={animated ? { scaleX: 1 } : {}}
               transition={animated ? { duration: 0.8, delay: 0.6 } : {}}
               aria-hidden="true"
             />
-          </motion.div>
+          </m.div>
 
           {/* Enhanced Description with Typing Effect */}
-          <motion.div
+          <m.div
             initial={animated ? { y: 30, opacity: 0 } : false}
             animate={animated ? { y: 0, opacity: 1 } : {}}
             transition={animated ? { duration: 0.6, delay: 0.5 } : {}}
@@ -407,14 +416,14 @@ export function Hero() {
             </p>
 
             {/* Skills List with Fade-in Animation */}
-            <motion.div
+            <m.div
               initial={animated ? { opacity: 0, y: 20 } : false}
               animate={animated ? { opacity: 1, y: 0 } : {}}
               transition={animated ? { duration: 0.8, delay: 1.0 } : {}}
               className="flex flex-wrap justify-center gap-2 mt-4"
             >
               {skills.map((skill, index) => (
-                <motion.span
+                <m.span
                   key={skill.text}
                   initial={animated ? { opacity: 0, scale: 0.8 } : false}
                   animate={animated ? { opacity: 1, scale: 1 } : {}}
@@ -431,19 +440,19 @@ export function Hero() {
                   className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-700/50 hover:scale-105 transition-transform cursor-default"
                 >
                   {skill.text}
-                </motion.span>
+                </m.span>
               ))}
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Enhanced CTA Buttons with Prominent Download Button */}
-          <motion.div
+          <m.div
             initial={animated ? { y: 30, opacity: 0 } : false}
             animate={animated ? { y: 0, opacity: 1 } : {}}
             transition={animated ? { duration: 0.6, delay: 0.6 } : {}}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
           >
-            <motion.div
+            <m.div
               whileHover={animated ? { scale: 1.05 } : {}}
               whileTap={animated ? { scale: 0.95 } : {}}
               className="relative"
@@ -467,9 +476,9 @@ export function Hero() {
                   Download Resume
                 </a>
               </Button>
-            </motion.div>
+            </m.div>
 
-            <motion.div
+            <m.div
               whileHover={animated ? { scale: 1.05 } : {}}
               whileTap={animated ? { scale: 0.95 } : {}}
             >
@@ -490,18 +499,18 @@ export function Hero() {
                   />
                 </a>
               </Button>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Enhanced Social Links */}
-          <motion.div
+          <m.div
             initial={animated ? { y: 30, opacity: 0 } : false}
             animate={animated ? { y: 0, opacity: 1 } : {}}
             transition={animated ? { duration: 0.6, delay: 0.7 } : {}}
             className="flex justify-center space-x-6 -mt-4"
           >
             {socialLinks.map((social, index) => (
-              <motion.a
+              <m.a
                 key={social.label}
                 href={social.href}
                 target={
@@ -532,6 +541,10 @@ export function Hero() {
                     alt={social.label}
                     width={32}
                     height={32}
+                    sizes="32px"
+                    loading="lazy"
+                    quality={70}
+                    decoding="async"
                     className="w-8 h-8 object-contain rounded-full shadow-md group-hover:scale-110 transition-transform"
                   />
                 ) : social.icon ? (
@@ -541,11 +554,13 @@ export function Hero() {
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                   {social.label}
                 </div>
-              </motion.a>
+              </m.a>
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </div>
-    </section>
+      </section>
+    </LazyMotion>
   );
 }
+
