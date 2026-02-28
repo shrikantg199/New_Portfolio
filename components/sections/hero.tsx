@@ -156,7 +156,7 @@ export function Hero() {
 
     const timer = setTimeout(
       typeText,
-      isDeleting ? deletingSpeed : typingSpeed
+      isDeleting ? deletingSpeed : typingSpeed,
     );
     return () => clearTimeout(timer);
   }, [currentText, isDeleting, currentSkillIndex, prefersReducedMotion]);
@@ -177,10 +177,6 @@ export function Hero() {
       // ignore storage errors
     }
   }, []);
-
-  const handleScrollToAbout = (): void => {
-    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   // Helpers to disable or tone down animations when reduced motion is preferred
   const animated = !prefersReducedMotion;
@@ -328,11 +324,11 @@ export function Hero() {
               className="relative"
             >
               <Image
-                src="/hero.png"
+                src="/Hero.jpeg"
                 alt="Shrikant Gaikwad profile photo"
                 width={144}
                 height={144}
-                className="relative w-36 h-36 rounded-full object-cover shadow-2xl border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-800"
+                className="relative w-36 h-36 rounded-full object-cover  border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-800"
                 priority
               />
             </motion.div>
