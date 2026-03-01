@@ -13,14 +13,17 @@ export async function POST(request: NextRequest) {
       // to avoid exposing configuration issues to the frontend
       if (process.env.NODE_ENV === "development") {
         return NextResponse.json(
-          { error: "Email service not configured. Check EMAIL_USER and EMAIL_PASS environment variables." },
-          { status: 500 }
+          {
+            error:
+              "Email service not configured. Check EMAIL_USER and EMAIL_PASS environment variables.",
+          },
+          { status: 500 },
         );
       } else {
         // In production, log the error but return success to avoid exposing configuration issues
         return NextResponse.json(
           { message: "Email sent successfully." },
-          { status: 200 }
+          { status: 200 },
         );
       }
     }
@@ -28,8 +31,8 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!body.name || !body.email || !body.message) {
       return NextResponse.json(
-        { error: "Name, email, and message are required." },
-        { status: 400 }
+        { error: "Name, email and message are required." },
+        { status: 400 },
       );
     }
 
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(body.email)) {
       return NextResponse.json(
         { error: "Invalid email format." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -104,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Email sent successfully." },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: unknown) {
     console.error("Error sending email:", error);
@@ -113,7 +116,7 @@ export async function POST(request: NextRequest) {
         error: "Failed to send email.",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

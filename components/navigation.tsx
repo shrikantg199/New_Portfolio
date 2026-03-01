@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -36,14 +37,48 @@ const IconX = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M6 6l12 12" />
   </svg>
 );
+const IconHome = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <path d="M3 10.5 12 3l9 7.5" />
+    <path d="M5 9.5V21h14V9.5" />
+  </svg>
+);
+const IconUser = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21c1.5-3.5 4.4-5 8-5s6.5 1.5 8 5" />
+  </svg>
+);
+const IconSpark = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <path d="M12 2 9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
+  </svg>
+);
+const IconBriefcase = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <rect x="3" y="7" width="18" height="13" rx="2" />
+    <path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+  </svg>
+);
+const IconFolder = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+  </svg>
+);
+const IconMail = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m3 7 9 6 9-6" />
+  </svg>
+);
 
 const navItems = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Experience", href: "#experience" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "#home", icon: IconHome },
+  { name: "About", href: "#about", icon: IconUser },
+  { name: "Skills", href: "#skills", icon: IconSpark },
+  { name: "Experience", href: "#experience", icon: IconBriefcase },
+  { name: "Projects", href: "#projects", icon: IconFolder },
+  { name: "Contact", href: "#contact", icon: IconMail },
 ];
 
 export function Navigation() {
@@ -136,7 +171,7 @@ export function Navigation() {
         root: null,
         rootMargin: "0px 0px -60% 0px",
         threshold: [0.15, 0.35, 0.6],
-      }
+      },
     );
 
     elements.forEach((el) => observer.observe(el));
@@ -201,45 +236,66 @@ export function Navigation() {
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 md:hidden bg-white dark:bg-black z-[100]">
-            <button
-              type="button"
-              aria-label="Close menu"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute top-5 right-5 p-3 rounded-full bg-muted/60 hover:bg-muted transition-colors"
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="fixed inset-0 md:hidden bg-white dark:bg-black h-screen z-[100]"
             >
-              <IconX className="w-[22px] h-[22px] text-foreground" />
-            </button>
+              <motion.div
+                initial={{ y: -12, opacity: 0.96 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -12, opacity: 0.96 }}
+                transition={{ duration: 0.24, ease: "easeOut" }}
+                className="h-full w-full"
+              >
+                <button
+                  type="button"
+                  aria-label="Close menu"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="absolute top-5 right-5 p-3 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+                >
+                  <IconX className="w-[22px] h-[22px] text-slate-900" />
+                </button>
 
-            <div className="h-full w-full flex flex-col items-start justify-start px-6 pt-24 pb-8">
-              <div className="w-full flex flex-col space-y-6">
-                {navItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className={`text-xl light:text-black dark:text-white font-semibold tracking-wide transition-colors ${
-                      activeSection === item.href.replace("#", "")
-                        ? "text-[#2563eb] dark:text-[#2563eb]"
-                        : "hover:text-[#2563eb] dark:hover:text-[#2563eb]"
-                    }`}
-                    onClick={() => {
-                      setActiveSection(item.href.replace("#", ""));
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-              <div className="mt-auto text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Shrikant Gaikwad
-              </div>
-            </div>
-          </div>
-        )}
+                <div className="h-full w-full flex flex-col items-start justify-start px-6 pt-24 pb-8">
+                  <div className="w-full flex flex-col space-y-6">
+                    {navItems.map((item, index) => (
+                      <motion.a
+                        key={item.name}
+                        href={item.href}
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.2, delay: 0.04 * index }}
+                        className={`text-xl text-slate-900 dark:text-slate-100  font-semibold tracking-wide transition-colors ${
+                          activeSection === item.href.replace("#", "")
+                            ? "text-[#2563eb]"
+                            : "hover:text-[#2563eb]"
+                        }`}
+                        onClick={() => {
+                          setActiveSection(item.href.replace("#", ""));
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        <span className="inline-flex items-center gap-2">
+                          <item.icon className="w-5 h-5" />
+                          {item.name}
+                        </span>
+                      </motion.a>
+                    ))}
+                  </div>
+                  <div className="mt-auto text-sm text-slate-500">
+                    © {new Date().getFullYear()} Shrikant Gaikwad
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );
 }
-

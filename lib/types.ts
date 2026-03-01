@@ -1,7 +1,9 @@
 export interface Project {
   id: number;
   title: string;
-  description: string;
+  problem: string;
+  role: string;
+  result: string;
   technologies: string[];
   liveUrl?: string;
   githubUrl?: string;
@@ -12,6 +14,8 @@ export interface Project {
 
 export interface SkillCategory {
   title: string;
+  highlights: string[];
+  projectRef: string;
   skills: string[];
   color: string;
   icon: React.ComponentType<{ className?: string }>;

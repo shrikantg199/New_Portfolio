@@ -1,6 +1,6 @@
 # Shrikant Gaikwad - Portfolio
 
-A modern, responsive portfolio website built with Next.js, React, TypeScript, and Tailwind CSS.
+A modern, responsive portfolio website built with Next.js, React, TypeScript and Tailwind CSS.
 
 ## 🚀 Features
 

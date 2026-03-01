@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  LazyMotion,
-  domAnimation,
-  m,
-  AnimatePresence,
-  useReducedMotion,
-} from "framer-motion";
+import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { SocialLink } from "@/lib/types";
+import { FollowerPointerCard } from "@/components/ui/following-pointer";
 // Inline icon components to avoid bundling lucide-react
 const IconDownload = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -44,39 +39,6 @@ const IconExternalLink = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M21 14v7H3V3h7" />
   </svg>
 );
-const IconSparkles = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    {...props}
-  >
-    <path d="M12 2l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z" />
-    <path d="M20 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z" />
-  </svg>
-);
-const IconMove = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    {...props}
-  >
-    <path d="M12 2l3 3-3 3-3-3 3-3z" />
-    <path d="M12 22l3-3-3-3-3 3 3 3z" />
-    <path d="M2 12l3 3 3-3-3-3-3 3z" />
-    <path d="M22 12l-3 3-3-3 3-3 3 3z" />
-  </svg>
-);
-
 // Removed floatingElements as requested
 
 // Subtle floating code symbols
@@ -119,70 +81,22 @@ const socialLinks: SocialLink[] = [
   },
 ];
 
-// Skills for typing effect
-const skills = [
-  { text: "React", className: "text-blue-600 dark:text-blue-400" },
-  { text: "Next.js", className: "text-purple-600 dark:text-purple-400" },
-  { text: "Node.js", className: "text-green-600 dark:text-green-400" },
-  { text: "TypeScript", className: "text-blue-600 dark:text-blue-400" },
-  { text: "React Native", className: "text-cyan-600 dark:text-cyan-400" },
-];
+const HeroPointerTitle = () => (
+  <div className="flex items-center space-x-2 bg-cyan-500 from-green-500 via-emerald-500 to-teal-500 p-2 rounded-full">
+    <Image
+      src="/Hero.jpeg"
+      height={20}
+      width={20}
+      alt="Shrikant avatar"
+      className="rounded-full border-2 border-white"
+    />
+    <p className="text-xs font-medium">Shrikant Gaikwad</p>
+  </div>
+);
 
 export function Hero() {
-  const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
   const bgRef = useRef<HTMLDivElement>(null);
-  const [showDragHint, setShowDragHint] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    const typingSpeed = isDeleting ? 50 : 100;
-    const deletingSpeed = 50;
-    const pauseTime = 1000;
-
-    if (prefersReducedMotion) return; // Skip typing loop on reduced motion
-
-    const typeText = () => {
-      const currentSkill = skills[currentSkillIndex];
-
-      if (isDeleting) {
-        setCurrentText(currentSkill.text.substring(0, currentText.length - 1));
-        if (currentText === "") {
-          setIsDeleting(false);
-          setCurrentSkillIndex((prev) => (prev + 1) % skills.length);
-        }
-      } else {
-        setCurrentText(currentSkill.text.substring(0, currentText.length + 1));
-        if (currentText === currentSkill.text) {
-          setTimeout(() => setIsDeleting(true), pauseTime);
-        }
-      }
-    };
-
-    const timer = setTimeout(
-      typeText,
-      isDeleting ? deletingSpeed : typingSpeed,
-    );
-    return () => clearTimeout(timer);
-  }, [currentText, isDeleting, currentSkillIndex, prefersReducedMotion]);
-
-  // Show one-time drag hint on first visit
-  useEffect(() => {
-    try {
-      const key = "dragHintShown";
-      const alreadyShown =
-        typeof window !== "undefined" && localStorage.getItem(key);
-      if (!alreadyShown) {
-        setShowDragHint(true);
-        localStorage.setItem(key, "1");
-        const t = setTimeout(() => setShowDragHint(false), 4500);
-        return () => clearTimeout(t);
-      }
-    } catch (_) {
-      // ignore storage errors
-    }
-  }, []);
 
   // Helpers to disable or tone down animations when reduced motion is preferred
   const animated = !prefersReducedMotion;
@@ -193,374 +107,271 @@ export function Hero() {
         id="home"
         className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50 dark:bg-slate-900"
       >
-      {/* One-time drag hint */}
-      <AnimatePresence>
-        {showDragHint && (
+        {/* Enhanced Background Elements */}
+        <div ref={bgRef} className="absolute inset-0">
+          {/* Gradient Orbs with reduced opacity for solid background */}
           <m.div
-            initial={animated ? { opacity: 0, y: -8 } : false}
-            animate={animated ? { opacity: 1, y: 0 } : {}}
-            exit={animated ? { opacity: 0, y: -8 } : {}}
-            transition={animated ? { duration: 0.3 } : {}}
-            className="absolute right-4 z-40 top-20"
-          >
-            <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-slate-900/80 text-white text-sm shadow-lg backdrop-blur-md border border-white/10">
-              <IconMove className="w-4 h-4" aria-hidden="true" />
-              <span>Tip: Drag the background symbols</span>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
-      {/* Enhanced Background Elements */}
-      <div ref={bgRef} className="absolute inset-0">
-        {/* Gradient Orbs with reduced opacity for solid background */}
-        <m.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none"
-          animate={animated ? { scale: [1, 1.2, 1], rotate: 360 } : {}}
-          transition={
-            animated
-              ? {
-                  scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-                  rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                }
-              : {}
-          }
-          aria-hidden="true"
-        />
-        <m.div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/10 to-pink-600/10 rounded-full blur-3xl pointer-events-none"
-          animate={animated ? { scale: [1.2, 1, 1.2], rotate: -360 } : {}}
-          transition={
-            animated
-              ? {
-                  scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-                  rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-                }
-              : {}
-          }
-          aria-hidden="true"
-        />
-
-        {/* Center-only grid (light mode) */}
-        <div
-          className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.5)_1px,transparent_1px)] [background-size:100px_100px] [background-position:center] [mask-image:radial-gradient(ellipse_55%_55%_at_50%_50%,white_60%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%] dark:hidden pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* Center-only grid (dark mode) */}
-        <div
-          className="hidden dark:block absolute inset-0 dark:bg-[linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] dark:[background-size:100px_100px] [background-position:center] [mask-image:radial-gradient(ellipse_55%_55%_at_50%_50%,white_60%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%] pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* Subtle blue blurs in all four corners */}
-        <div
-          className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* Floating text symbols (very subtle, draggable) */}
-        {floatingSymbols.map((symbol, index) => (
-          <m.span
-            key={`sym-${index}`}
-            className="absolute z-20 select-none pointer-events-auto cursor-grab active:cursor-grabbing touch-none text-4xl font-semibold text-slate-400/20 dark:text-slate-200/15"
-            style={{ left: symbol.x, top: symbol.y }}
-            animate={
-              animated
-                ? { y: [0, -30, 0], rotate: [0, 6, -6, 0], scale: [1, 1.05, 1] }
-                : {}
-            }
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none"
+            animate={animated ? { scale: [1, 1.08, 1] } : {}}
             transition={
               animated
                 ? {
-                    duration: symbol.duration,
-                    repeat: Infinity,
-                    delay: symbol.delay,
-                    ease: "easeInOut",
+                    scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
                   }
                 : {}
             }
-            drag={animated}
-            whileDrag={animated ? { scale: 1.05 } : {}}
-            dragElastic={0.2}
-            dragMomentum={false}
             aria-hidden="true"
-          >
-            {symbol.text}
-          </m.span>
-        ))}
-      </div>
-
-      <div className="container mx-auto px-4 py-10 md:py-20 relative z-10  md:mb-6">
-        <div className="text-center max-w-5xl mx-auto">
-          {/* Profile Image with Enhanced Effects */}
+          />
           <m.div
-            initial={animated ? { scale: 0, opacity: 0, rotate: -180 } : false}
-            animate={animated ? { scale: 1, opacity: 1, rotate: 0 } : {}}
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/10 to-pink-600/10 rounded-full blur-3xl pointer-events-none"
+            animate={animated ? { scale: [1.08, 1, 1.08] } : {}}
             transition={
-              animated ? { duration: 0.8, type: "spring", stiffness: 100 } : {}
-            }
-            className="relative inline-block  md:mb-12"
-          >
-            <m.div
-              className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-md opacity-75"
-              animate={animated ? { rotate: 360 } : {}}
-              transition={
-                animated
-                  ? { duration: 8, repeat: Infinity, ease: "linear" }
-                  : {}
-              }
-              aria-hidden="true"
-            />
-            <m.div
-              whileHover={
-                animated ? { scale: 1.05, rotate: [0, -2, 2, 0] } : {}
-              }
-              transition={animated ? { duration: 0.3 } : {}}
-              className="relative"
-            >
-              <Image
-                src="/Hero.jpeg"
-                alt="Shrikant Gaikwad profile photo"
-                width={144}
-                height={144}
-                sizes="144px"
-                quality={72}
-                className="relative w-36 h-36 rounded-full object-cover  border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-800"
-                priority
-              />
-            </m.div>
-
-            {/* Status Indicator */}
-            <m.div
-              className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-3 border-white dark:border-slate-800 rounded-full flex items-center justify-center"
-              animate={animated ? { scale: [1, 1.2, 1] } : {}}
-              transition={animated ? { duration: 2, repeat: Infinity } : {}}
-              aria-label="Available for opportunities"
-            >
-              <div className="w-2 h-2 bg-white rounded-full" />
-            </m.div>
-          </m.div>
-
-          {/* Enhanced Name and Title */}
-          <m.div
-            initial={animated ? { y: 50, opacity: 0 } : false}
-            animate={animated ? { y: 0, opacity: 1 } : {}}
-            transition={animated ? { duration: 0.8, delay: 0.3 } : {}}
-            className="mb-2"
-          >
-            <m.div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4"
-              initial={animated ? { scale: 0.8, opacity: 0 } : false}
-              animate={animated ? { scale: 1, opacity: 1 } : {}}
-              transition={animated ? { duration: 0.5, delay: 0.2 } : {}}
-            >
-              <IconSparkles className="w-4 h-4" aria-hidden="true" />
-              Available for opportunities
-            </m.div>
-
-            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-1 md:mb-2 leading-tight">
-              <m.span
-                className="inline-block text-primary"
-                whileHover={animated ? { scale: 1.02 } : {}}
-                transition={animated ? { duration: 0.2 } : {}}
-              >
-                Shrikant Gaikwad
-              </m.span>
-              <br />
-            </h1>
-          </m.div>
-
-          <m.div
-            initial={animated ? { y: 30, opacity: 0 } : false}
-            animate={animated ? { y: 0, opacity: 1 } : {}}
-            transition={animated ? { duration: 0.6, delay: 0.4 } : {}}
-            className="mb-2 md:mb-2"
-          >
-            <p className="text-2xl md:text-3xl font-semibold text-slate-600 dark:text-slate-300 mb-2">
-              Full Stack Web Developer
-            </p>
-            <m.div
-              className="w-24 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mx-auto rounded-full"
-              initial={animated ? { scaleX: 0 } : false}
-              animate={animated ? { scaleX: 1 } : {}}
-              transition={animated ? { duration: 0.8, delay: 0.6 } : {}}
-              aria-hidden="true"
-            />
-          </m.div>
-
-          {/* Enhanced Description with Typing Effect */}
-          <m.div
-            initial={animated ? { y: 30, opacity: 0 } : false}
-            animate={animated ? { y: 0, opacity: 1 } : {}}
-            transition={animated ? { duration: 0.6, delay: 0.5 } : {}}
-            className="md:mb-6 mb-2 max-w-3xl mx-auto"
-          >
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
-              Building scalable web & mobile apps with{" "}
-              <span className="font-semibold text-blue-600 dark:text-blue-400">
-                {prefersReducedMotion ? "React, Next.js, Node.js" : currentText}
-                <span className="animate-pulse">|</span>
-              </span>
-            </p>
-
-            {/* Skills List with Fade-in Animation */}
-            <m.div
-              initial={animated ? { opacity: 0, y: 20 } : false}
-              animate={animated ? { opacity: 1, y: 0 } : {}}
-              transition={animated ? { duration: 0.8, delay: 1.0 } : {}}
-              className="flex flex-wrap justify-center gap-2 mt-4"
-            >
-              {skills.map((skill, index) => (
-                <m.span
-                  key={skill.text}
-                  initial={animated ? { opacity: 0, scale: 0.8 } : false}
-                  animate={animated ? { opacity: 1, scale: 1 } : {}}
-                  transition={
-                    animated
-                      ? {
-                          duration: 0.5,
-                          delay: 1.2 + index * 0.1,
-                          type: "spring",
-                          stiffness: 200,
-                        }
-                      : {}
+              animated
+                ? {
+                    scale: {
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
                   }
-                  className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-700/50 hover:scale-105 transition-transform cursor-default"
-                >
-                  {skill.text}
-                </m.span>
-              ))}
-            </m.div>
-          </m.div>
+                : {}
+            }
+            aria-hidden="true"
+          />
 
-          {/* Enhanced CTA Buttons with Prominent Download Button */}
-          <m.div
-            initial={animated ? { y: 30, opacity: 0 } : false}
-            animate={animated ? { y: 0, opacity: 1 } : {}}
-            transition={animated ? { duration: 0.6, delay: 0.6 } : {}}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-          >
-            <m.div
-              whileHover={animated ? { scale: 1.05 } : {}}
-              whileTap={animated ? { scale: 0.95 } : {}}
-              className="relative"
+          {/* Center-only grid (light mode) */}
+          <div
+            className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.5)_1px,transparent_1px)] [background-size:100px_100px] [background-position:center] [mask-image:radial-gradient(ellipse_55%_55%_at_50%_50%,white_60%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%] dark:hidden pointer-events-none"
+            aria-hidden="true"
+          />
+
+          {/* Center-only grid (dark mode) */}
+          <div
+            className="hidden dark:block absolute inset-0 dark:bg-[linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] dark:[background-size:100px_100px] [background-position:center] [mask-image:radial-gradient(ellipse_55%_55%_at_50%_50%,white_60%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%] pointer-events-none"
+            aria-hidden="true"
+          />
+
+          {/* Subtle blue blurs in all four corners */}
+          <div
+            className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-400/15 rounded-full blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+
+          {/* Floating text symbols */}
+          {floatingSymbols.map((symbol, index) => (
+            <m.span
+              key={`sym-${index}`}
+              className="absolute z-20 select-none pointer-events-none text-4xl font-semibold text-slate-400/20 dark:text-slate-200/15"
+              style={{ left: symbol.x, top: symbol.y }}
+              aria-hidden="true"
             >
-              {/* Glow effect for download button */}
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-lg blur-lg opacity-75 animate-pulse" />
-              <Button
-                size="lg"
-                className="relative bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-xl hover:shadow-2xl px-8 py-3 text-lg font-bold transform hover:-translate-y-1 transition-all duration-300"
-                asChild
-              >
-                <a
-                  href="/Shrikant_Gaikwad_Resume.pdf"
-                  download
-                  aria-label="Download Shrikant Gaikwad's resume"
-                >
-                  <IconDownload
-                    className="w-5 h-5 mr-2 group-hover:animate-bounce"
-                    aria-hidden="true"
-                  />
-                  Download Resume
-                </a>
-              </Button>
-            </m.div>
+              {symbol.text}
+            </m.span>
+          ))}
+        </div>
 
-            <m.div
-              whileHover={animated ? { scale: 1.05 } : {}}
-              whileTap={animated ? { scale: 0.95 } : {}}
+        <div className="container mx-auto px-4 py-10 md:py-20 relative z-10 md:mb-6">
+          <div className="text-center max-w-5xl mx-auto">
+            <FollowerPointerCard
+              title={<HeroPointerTitle />}
+              className="inline-block"
             >
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 border-slate-300 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-8 py-3 text-lg font-semibold"
-                asChild
-              >
-                <a
-                  href="#projects"
-                  aria-label="View Shrikant Gaikwad's projects"
-                >
-                  View My Work
-                  <IconExternalLink
-                    className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-                    aria-hidden="true"
-                  />
-                </a>
-              </Button>
-            </m.div>
-          </m.div>
-
-          {/* Enhanced Social Links */}
-          <m.div
-            initial={animated ? { y: 30, opacity: 0 } : false}
-            animate={animated ? { y: 0, opacity: 1 } : {}}
-            transition={animated ? { duration: 0.6, delay: 0.7 } : {}}
-            className="flex justify-center space-x-6 -mt-4"
-          >
-            {socialLinks.map((social, index) => (
-              <m.a
-                key={social.label}
-                href={social.href}
-                target={
-                  social.href.startsWith("mailto:") ? undefined : "_blank"
+              {/* Profile Image with Enhanced Effects */}
+              <m.div
+                initial={
+                  animated ? { scale: 0, opacity: 0, rotate: -180 } : false
                 }
-                rel={
-                  social.href.startsWith("mailto:")
-                    ? undefined
-                    : "noopener noreferrer"
-                }
-                className="group relative p-0 bg-transparent border-0 shadow-none hover:scale-110 transition-transform"
-                whileHover={
+                animate={animated ? { scale: 1, opacity: 1, rotate: 0 } : {}}
+                transition={
                   animated
-                    ? { scale: 1.1, rotate: index % 2 === 0 ? 5 : -5, y: -5 }
+                    ? { duration: 0.8, type: "spring", stiffness: 100 }
                     : {}
                 }
-                whileTap={animated ? { scale: 0.9 } : {}}
-                initial={animated ? { y: 20, opacity: 0 } : false}
-                animate={animated ? { y: 0, opacity: 1 } : {}}
-                transition={
-                  animated ? { duration: 0.5, delay: 0.8 + index * 0.1 } : {}
-                }
-                aria-label={`Visit ${social.label} profile`}
+                className="relative inline-block md:mb-12"
               >
-                {social.imageSrc ? (
+                <m.div
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/45 via-indigo-500/40 to-violet-500/35 rounded-full blur-[6px] opacity-40"
+                  aria-hidden="true"
+                />
+                <m.div
+                  whileHover={animated ? { scale: 1.03 } : {}}
+                  transition={animated ? { duration: 0.3 } : {}}
+                  className="relative"
+                >
                   <Image
-                    src={social.imageSrc}
-                    alt={social.label}
-                    width={32}
-                    height={32}
-                    sizes="32px"
-                    loading="lazy"
-                    quality={70}
-                    decoding="async"
-                    className="w-8 h-8 object-contain rounded-full shadow-md group-hover:scale-110 transition-transform"
+                    src="/Hero.jpeg"
+                    alt="Shrikant Gaikwad profile photo"
+                    width={144}
+                    height={144}
+                    sizes="144px"
+                    quality={72}
+                    className="relative w-36 h-36 rounded-full object-cover border-[3px] border-white dark:border-slate-800 bg-white dark:bg-slate-800 shadow-sm"
+                    priority
                   />
-                ) : social.icon ? (
-                  <social.icon className="w-8 h-8 text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                ) : null}
-                {/* Tooltip */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  {social.label}
-                </div>
-              </m.a>
-            ))}
-          </m.div>
+                </m.div>
+
+                {/* Status Indicator */}
+                <m.div
+                  className="absolute bottom-1.5 right-1.5 w-5 h-5 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full flex items-center justify-center"
+                  aria-label="Available for opportunities"
+                >
+                  <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                </m.div>
+              </m.div>
+
+              {/* Enhanced Name and Title */}
+              <m.div
+                initial={animated ? { y: 50, opacity: 0 } : false}
+                animate={animated ? { y: 0, opacity: 1 } : {}}
+                transition={animated ? { duration: 0.8, delay: 0.3 } : {}}
+                className="mb-2"
+              >
+                <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-1 md:mb-2 leading-tight">
+                  <m.span
+                    className="inline-block text-primary"
+                    whileHover={animated ? { scale: 1.02 } : {}}
+                    transition={animated ? { duration: 0.2 } : {}}
+                  >
+                    Shrikant Gaikwad
+                  </m.span>
+                  <br />
+                </h1>
+              </m.div>
+
+              <m.div
+                initial={animated ? { y: 30, opacity: 0 } : false}
+                animate={animated ? { y: 0, opacity: 1 } : {}}
+                transition={animated ? { duration: 0.6, delay: 0.4 } : {}}
+                className="mb-2 md:mb-2"
+              >
+                <p className="text-base md:text-lg font-medium text-slate-600 dark:text-slate-300 mb-2 max-w-3xl mx-auto leading-relaxed">
+                  Full Stack & Mobile Engineer specializing in scalable React,
+                  Next.js, and React Native applications.
+                </p>
+                <p className="text-sm md:text-base font-medium text-blue-700 dark:text-blue-300 mb-3">
+                  Open to Full-Time (Pune), Remote & Freelance Opportunities
+                </p>
+              </m.div>
+            </FollowerPointerCard>
+
+            {/* Enhanced CTA Buttons with Prominent Download Button */}
+            <m.div
+              initial={animated ? { y: 30, opacity: 0 } : false}
+              animate={animated ? { y: 0, opacity: 1 } : {}}
+              transition={animated ? { duration: 0.6, delay: 0.6 } : {}}
+              className="flex flex-col sm:flex-row gap-4 justify-center mb-10"
+            >
+              <m.div
+                whileHover={animated ? { scale: 1.05 } : {}}
+                whileTap={animated ? { scale: 0.95 } : {}}
+                className="relative"
+              >
+                <Button
+                  size="lg"
+                  className="relative bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-xl hover:shadow-2xl px-8 py-3 text-lg font-bold transition-all duration-300"
+                  asChild
+                >
+                  <a
+                    href="/Shrikant_Gaikwad_Resume.pdf"
+                    download
+                    aria-label="Download Shrikant Gaikwad's resume"
+                  >
+                    <IconDownload className="w-5 h-5 mr-2" aria-hidden="true" />
+                    Download Resume
+                  </a>
+                </Button>
+              </m.div>
+
+              <m.div
+                whileHover={animated ? { scale: 1.05 } : {}}
+                whileTap={animated ? { scale: 0.95 } : {}}
+              >
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-2 border-slate-300 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-8 py-3 text-lg font-semibold"
+                  asChild
+                >
+                  <a
+                    href="#projects"
+                    aria-label="View Shrikant Gaikwad's projects"
+                  >
+                    View My Work
+                    <IconExternalLink
+                      className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </Button>
+              </m.div>
+            </m.div>
+
+            {/* Enhanced Social Links */}
+            <m.div
+              initial={animated ? { y: 30, opacity: 0 } : false}
+              animate={animated ? { y: 0, opacity: 1 } : {}}
+              transition={animated ? { duration: 0.6, delay: 0.7 } : {}}
+              className="flex justify-center space-x-6 -mt-2"
+            >
+              {socialLinks.map((social, index) => (
+                <m.a
+                  key={social.label}
+                  href={social.href}
+                  target={
+                    social.href.startsWith("mailto:") ? undefined : "_blank"
+                  }
+                  rel={
+                    social.href.startsWith("mailto:")
+                      ? undefined
+                      : "noopener noreferrer"
+                  }
+                  className="group relative p-0 bg-transparent border-0 shadow-none hover:scale-110 transition-transform"
+                  whileHover={animated ? { scale: 1.08, y: -2 } : {}}
+                  whileTap={animated ? { scale: 0.9 } : {}}
+                  initial={animated ? { y: 20, opacity: 0 } : false}
+                  animate={animated ? { y: 0, opacity: 1 } : {}}
+                  transition={
+                    animated ? { duration: 0.5, delay: 0.8 + index * 0.1 } : {}
+                  }
+                  aria-label={`Visit ${social.label} profile`}
+                >
+                  {social.imageSrc ? (
+                    <Image
+                      src={social.imageSrc}
+                      alt={social.label}
+                      width={32}
+                      height={32}
+                      sizes="32px"
+                      loading="lazy"
+                      quality={70}
+                      decoding="async"
+                      className="w-8 h-8 object-contain rounded-full shadow-md group-hover:scale-110 transition-transform"
+                    />
+                  ) : social.icon ? (
+                    <social.icon className="w-8 h-8 text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                  ) : null}
+                  {/* Tooltip */}
+                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    {social.label}
+                  </div>
+                </m.a>
+              ))}
+            </m.div>
+          </div>
         </div>
-      </div>
       </section>
     </LazyMotion>
   );
 }
-

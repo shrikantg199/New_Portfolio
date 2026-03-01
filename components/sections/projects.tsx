@@ -20,8 +20,9 @@ const projects: Project[] = [
   {
     id: 1,
     title: "Portfolio",
-    description:
-      "Modern portfolio built with Next.js, React, and Tailwind CSS showcasing projects and skills.",
+    problem: "Needed one professional place to showcase work and skills.",
+    role: "Built and deployed the portfolio solo from scratch.",
+    result: "Launched a fast site that improved recruiter visibility.",
     technologies: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
     liveUrl: "https://shrikant-portfolio-10.vercel.app/",
     githubUrl: "https://github.com/shrikantg199/Portfolio_",
@@ -32,8 +33,9 @@ const projects: Project[] = [
   {
     id: 2,
     title: "BuzzBasket",
-    description:
-      "BuzzBasket: Full-stack eCommerce with authentication, products, cart, orders.",
+    problem: "Needed a complete eCommerce flow from login to checkout.",
+    role: "Developed the full-stack app and deployed it end-to-end.",
+    result: "Shipped a production-ready store with cart and orders.",
     technologies: [
       "React.js",
       "Tailwind CSS",
@@ -41,7 +43,7 @@ const projects: Project[] = [
       "Express.js",
       "Vercel",
       "Render",
-      "cloudnary",
+      "Cloudinary",
     ],
     liveUrl: "https://ecommerce-shop-5ngu.vercel.app/",
     githubUrl: "https://github.com/shrikantg199/ecommerce_shop",
@@ -52,29 +54,31 @@ const projects: Project[] = [
   {
     id: 3,
     title: "Learning Management System (LMS)",
-    description:
-      "Built a responsive LMS using Next.js, Firebase, ShadCN UI, deployed.",
+    problem: "Needed secure course delivery and learner progress tracking.",
+    role: "Led full-stack development and core architecture decisions.",
+    result: "Delivered a scalable LMS with better reliability.",
     technologies: [
       "React.js",
       "Next.js",
       "Firebase",
-      "vercel",
+      "Vercel",
       "GitHub",
       "Gemini-AI",
     ],
     liveUrl: "https://www.cyborgrobotics.in/",
     githubUrl:
       "https://github.com/Cyborg-Robotics-Academy-Pvt-Ltd/cyborg-robotics",
-    image: "/projects/web-projects/CyborgRobotics.png",
+    image: "/projects/web-projects/CyborgRobotics.jpg",
     year: "2024",
     category: "Web",
   },
   {
     id: 4,
     title: "Social Flow",
-    description:
-      "Built SocialFlow: full-stack Instagram-like app with auth, uploads, posts, likes, comments, follows.",
-    technologies: ["React.js", "Next.js", "MongoDB", "vercel", "GitHub"],
+    problem: "Needed to validate key social engagement workflows quickly.",
+    role: "Built the full-stack prototype with auth and feed features.",
+    result: "Released a working social app for UX validation.",
+    technologies: ["React.js", "Next.js", "MongoDB", "Vercel", "GitHub"],
     liveUrl: "https://social-flow-pied.vercel.app/",
     githubUrl: "https://github.com/shrikantg199/social-flow",
     image: "/projects/web-projects/SocialFlow.png",
@@ -84,7 +88,9 @@ const projects: Project[] = [
   {
     id: 5,
     title: "X App UI",
-    description: "built X app UI using react native + expo",
+    problem: "Needed hands-on practice with scalable React Native UI patterns.",
+    role: "Implemented the full X-style interface in Expo.",
+    result: "Delivered a polished UI ready for backend integration.",
     technologies: ["React Native (EXPO)", "Tailwind Css"],
     liveUrl: "",
     githubUrl: "https://github.com/shrikantg199/X-APP-clone-UI.git",
@@ -95,8 +101,9 @@ const projects: Project[] = [
   {
     id: 6,
     title: "LinkedIn Clone App",
-    description:
-      "Created a LinkedIn clone using React Native (Expo) and Firebase with authentication and real-time database.",
+    problem: "Needed a networking clone with auth and real-time data.",
+    role: "Built core mobile flows using Expo and Firebase.",
+    result: "Shipped a LinkedIn-style prototype with feed interactions.",
     technologies: ["React Native (Expo)", "Firebase", "Tailwind Css"],
     liveUrl: "",
     githubUrl: "https://github.com/shrikantg199/Linkedin_clone",
@@ -107,7 +114,9 @@ const projects: Project[] = [
   {
     id: 7,
     title: "Coffee Shop App",
-    description: "Built Coffee Shop app UI with authentication using Clerk.",
+    problem: "Needed a smooth mobile coffee browsing experience.",
+    role: "Built the UI and integrated Clerk auth in Expo.",
+    result: "Delivered a clean app flow with secure sign-in.",
     technologies: ["React Native (Expo)", "Clerk", "Tailwind Css"],
     liveUrl: "",
     githubUrl: "https://github.com/shrikantg199/Coffee_shop",
@@ -118,8 +127,9 @@ const projects: Project[] = [
   {
     id: 8,
     title: "Business Directory App",
-    description:
-      "React Native app with Firebase integration for business management and reviews.",
+    problem: "Needed one app for business discovery and reviews.",
+    role: "Built the React Native app with Firebase integration.",
+    result: "Launched a usable directory prototype for local discovery.",
     technologies: ["React Native", "Firebase"],
     liveUrl: "",
     githubUrl: "https://github.com/shrikantg199/Business_directory_App.git",
@@ -162,7 +172,7 @@ export function Projects() {
       <div className="container mx-auto px-4">
         <SectionHeader
           title="Featured Projects"
-          subtitle="A collection of projects showcasing modern web technologies and innovative solutions"
+          subtitle="Outcome-driven case studies with problem context, ownership, stack and measurable results"
         />
 
         {/* Category Filter */}
@@ -222,13 +232,33 @@ export function Projects() {
                       <span>{project.year}</span>
                     </div>
                   </div>
-                  <CardDescription className="text-sm leading-relaxed text-muted-foreground">
-                    {project.description}
+                  <CardDescription className="text-sm leading-relaxed text-muted-foreground space-y-2">
+                    <p>
+                      <span className="font-semibold text-foreground">
+                        Problem:{" "}
+                      </span>
+                      {project.problem}
+                    </p>
+                    <p>
+                      <span className="font-semibold text-foreground">
+                        Role:{" "}
+                      </span>
+                      {project.role}
+                    </p>
+                    <p>
+                      <span className="font-semibold text-foreground">
+                        Result:{" "}
+                      </span>
+                      {project.result}
+                    </p>
                   </CardDescription>
                 </CardHeader>
 
                 <CardContent className="pt-0 flex flex-col flex-1">
                   {/* Technologies */}
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">
+                    Tech Stack
+                  </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech) => (
                       <Badge
@@ -243,38 +273,35 @@ export function Projects() {
 
                   {/* Push buttons to bottom */}
                   <div className="flex gap-2 mt-auto">
-                    {/* Live Demo (only Web) */}
-                    {project.category === "Web" && (
-                      <Button
-                        size="sm"
-                        className="flex-1"
-                        asChild
-                        disabled={!project.liveUrl}
-                      >
-                        {project.liveUrl ? (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`View live demo of ${project.title}`}
-                          >
-                            <ExternalLink
-                              className="w-4 h-4 mr-2"
-                              aria-hidden="true"
-                            />
-                            Live Demo
-                          </a>
-                        ) : (
-                          <span className="flex items-center justify-center w-full">
-                            <ExternalLink
-                              className="w-4 h-4 mr-2"
-                              aria-hidden="true"
-                            />
-                            No Live Demo
-                          </span>
-                        )}
-                      </Button>
-                    )}
+                    <Button
+                      size="sm"
+                      className="flex-1"
+                      asChild
+                      disabled={!project.liveUrl}
+                    >
+                      {project.liveUrl ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`View live project for ${project.title}`}
+                        >
+                          <ExternalLink
+                            className="w-4 h-4 mr-2"
+                            aria-hidden="true"
+                          />
+                          Live Link
+                        </a>
+                      ) : (
+                        <span className="flex items-center justify-center w-full">
+                          <ExternalLink
+                            className="w-4 h-4 mr-2"
+                            aria-hidden="true"
+                          />
+                          No Live Link
+                        </span>
+                      )}
+                    </Button>
 
                     {/* GitHub Button */}
                     <Button

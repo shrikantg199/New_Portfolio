@@ -21,7 +21,7 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const assistantIntro = `Hello! I’m Shrikant Gaikwad’s AI assistant, here to share info about his work, skills, and projects. How can I help you today?`;
+  const assistantIntro = `Hello! I’m Shrikant Gaikwad’s AI assistant, here to share info about his work, skills and projects. How can I help you today?`;
 
   // Initialize messages - always start fresh without previous messages
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function Chatbot() {
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollViewport = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]"
+        "[data-radix-scroll-area-viewport]",
       );
       if (scrollViewport) {
         scrollViewport.scrollTop = scrollViewport.scrollHeight;

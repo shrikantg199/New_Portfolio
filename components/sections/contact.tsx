@@ -32,7 +32,7 @@ const contactInfo = [
   {
     icon: "/social-icon/Phone.png",
     label: "Phone",
-    value: "+91 7083099887",
+    value: "+91 7020354108",
     href: "tel:+917083099887",
     copyable: true,
   },
@@ -46,8 +46,8 @@ const contactInfo = [
   {
     icon: "/social-icon/Linkedin.png",
     label: "LinkedIn",
-    value: "linkedin.com/in/shrikant11",
-    href: "https://linkedin.com/in/shrikant11",
+    value: "linkedin.com/in/shrikant-gaikwad-dev",
+    href: "https://www.linkedin.com/in/shrikant-gaikwad-dev/",
     copyable: false,
   },
   {
@@ -120,7 +120,7 @@ export function Contact() {
           throw new Error("Too many requests. Please try again later.");
         } else if (response.status === 500) {
           throw new Error(
-            "Server error. Please contact me directly via email."
+            "Server error. Please contact me directly via email.",
           );
         } else {
           throw new Error(data.error || "Failed to send email");

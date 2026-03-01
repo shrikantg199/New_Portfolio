@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Timeline } from "@/components/ui/timeline";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Calendar } from "lucide-react";
@@ -8,12 +8,13 @@ const experiences = [
   {
     title: "Full Stack Web Developer",
     company: "Cyborg Robotics",
-    location: "India",
+    location: "Pune, Maharashtra, India",
     type: "Onsite",
-    duration: "Jun 2024 – Present",
+    duration: "Jun 2024 - Present",
     description: [
-      "Built an LMS with Next.js + Firebase, improving course delivery speed and reliability",
-      "Developed real-time auth and course management, enabling secure, scalable student access",
+      "Led end-to-end development of a production LMS used by 150+ learners, reducing content publish time by 40% with reusable course workflows.",
+      "Designed the application architecture and implemented secure auth, role-based access and real-time course management, cutting manual admin effort by 30%.",
+      "Collaborated with stakeholders to prioritize features and improved Core Web Vitals and page response time by 35% through optimized Next.js rendering and Firebase query tuning.",
     ],
     technologies: ["Next.js", "Firebase", "Vercel"],
     current: true,
@@ -23,10 +24,11 @@ const experiences = [
     company: "RDA Academy Patamda",
     location: "India",
     type: "Remote",
-    duration: "Oct 2023 – Jan 2024",
+    duration: "Oct 2023 - Jan 2024",
     description: [
-      "Completed intensive full-stack development training with production best practices",
-      "Designed and built projects using React.js and Node.js with clean UI and REST APIs",
+      "Owned delivery of 4 end-to-end web projects during internship, covering frontend, backend and deployment workflows.",
+      "Worked closely with mentors and peers to build React.js + Node.js applications with REST APIs, improving average feature delivery speed by 25%.",
+      "Drove performance and accessibility improvements, raising Lighthouse scores from ~70 to 90+ across project builds.",
     ],
     technologies: ["React.js", "Node.js", "JavaScript"],
     current: false,
