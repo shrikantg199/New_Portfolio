@@ -10,26 +10,26 @@ const SectionFallback = () => (
   </div>
 );
 
-const About = dynamic(
-  () => import("@/components/sections/about"),
-  { ssr: false, loading: () => <SectionFallback /> }
-);
-const Skills = dynamic(
-  () => import("@/components/sections/skills"),
-  { ssr: false, loading: () => <SectionFallback /> }
-);
-const Experience = dynamic(
-  () => import("@/components/sections/experience"),
-  { ssr: false, loading: () => <SectionFallback /> }
-);
-const Projects = dynamic(
-  () => import("@/components/sections/projects"),
-  { ssr: false, loading: () => <SectionFallback /> }
-);
-const Contact = dynamic(
-  () => import("@/components/sections/contact"),
-  { ssr: false, loading: () => <SectionFallback /> }
-);
+const About = dynamic(() => import("@/components/sections/about"), {
+  ssr: false,
+  loading: () => <SectionFallback />,
+});
+const Skills = dynamic(() => import("@/components/sections/skills"), {
+  ssr: false,
+  loading: () => <SectionFallback />,
+});
+const Experience = dynamic(() => import("@/components/sections/experience"), {
+  ssr: false,
+  loading: () => <SectionFallback />,
+});
+const Projects = dynamic(() => import("@/components/sections/projects"), {
+  ssr: false,
+  loading: () => <SectionFallback />,
+});
+const Contact = dynamic(() => import("@/components/sections/contact"), {
+  ssr: false,
+  loading: () => <SectionFallback />,
+});
 const Chatbot = dynamic(() => import("@/components/Chatbot"), { ssr: false });
 
 export default function Home() {
@@ -44,7 +44,7 @@ export default function Home() {
         <Projects />
         <Contact />
         <Footer />
-        <Chatbot />
+        {/* <Chatbot /> */}
       </main>
     </ErrorBoundary>
   );
